@@ -1,0 +1,26 @@
+export(calgsp1)
+export(calgspn)
+export(checkcrit)
+export(crosslist)
+export(findcrit)
+export(graphical)
+export(hochbergd)
+export(hommeld)
+export(inftocor)
+export(seqgspgx)
+export(seqgsphh)
+export(seqmbgx)
+export(seqqvalhh)
+export(spendingfun)
+export(updategraph)
+
+import(hommel)
+#importFrom("utils", "combn")
+importFrom("stats", "pnorm", "qnorm", "quantile", "rnorm", "uniroot","optimize")
+
+
+
+
+
+
+
