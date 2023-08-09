@@ -1,4 +1,29 @@
-# Check if the critical values are satisfactory
+##' Check critical values
+##'
+##' `checkcrit()` is a helper function that checks if the critical values
+##' are valid.
+##'
+##' @param scrit Numeric vector of critical values.
+##' @param salpha Numeric vector of cumulative alpha levels.
+##' @param smatrix General correlation matrix.
+##' @inherit calgspn
+## TODO Add further details about critical values returned (`sc` in the function)
+##' @return List with:
+##'   - `crit.value`: Critical values
+##'   - `salpha`: Cumulative alpha levels passed to `salpha` argument
+##' @author Xiaodong Luo
+## TODO Do we really need this in such small and specialized package?
+##' @concept group-sequential
+##' @concept critical values
+##' @concept efficacy boundary
+##' @examples
+##' checkcrit(
+##'   scrit = qnorm(c(0.01, 0.02, 0.025)),
+##'   salpha = c(0.01, 0.02, 0.025),
+##'   smatrix = diag(3),
+##'   sided = 1
+##' )
+##' @export
 checkcrit=function(scrit=qnorm(c(0.01,0.02,0.025)),salpha=c(0.01,0.02,0.025),smatrix=diag(3),sided=1){
   #scrit: sequence of critical values
   #salpha: sequence of cumulative alpha levels, to be compared with computed alpha levels

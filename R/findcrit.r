@@ -1,4 +1,30 @@
-# Find the critical values in the general correlation matrix
+##' Calculate critical values
+##'
+##' `findcirt()` calculates the critical values in the general correlation matrix
+##'
+## TODO Add further details about how these critical values are computed
+##' @inherit checkcrit
+##' @param tol Numeric scalar with the tolerance level for computing
+##'   critical values.
+## TODO Explain `alpha.tol` further
+##' @param alpha.tol Numeric scalar. If the alpha increment is less than this,
+##'   the critical value is set to a large number determined by `alpha.tol`.
+## TODO Why not just return `sc` instead of `list(crit.value = sc)`?
+##' @return List with element `crit.value` containing the obtained critical values.
+##' @author Xiaodong Luo
+##' @concept group-sequential
+##' @concept critical values
+##' @concept efficacy boundary
+##' @examples
+##' findcrit(
+##'   salpha = c(0.01, 0.02, 0.025),
+##'   smatrix = diag(3),
+##'   sided = 1,
+##'   tol = 1e-10,
+##'   alpha.tol = 1e-11
+##' )
+##' @export
+## TODO Refactor multiple calls to `omxMnor()` to make it simpler?
 findcrit=function(salpha=c(0.01,0.02,0.025),smatrix=diag(3),sided=1,tol=1e-10,alpha.tol=1e-11){
   #salpha: sequence of cumulative alpha levels
   #smatrix: general correlation matrix

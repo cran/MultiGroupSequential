@@ -1,14 +1,34 @@
-## a function to calculate the group-sequential p-values with one endpoint
+##' Calculate group-sequential p-values for one hypothesis
+##'
+##' `calgsp1()` calculates the group-sequential p-values for one hypothesis.
+##'
+##' @param sx Numeric vector of test statistics, assumed to be multivariate
+##'   normal with variance 1 and correlation matrix given by `smatrix`.
+##' @param scrit Numeric vector of sequece of critical values for the test
+##'   statistics in `sx`. It should be computed beforehand. Must have the same
+##'   length as `sx`.
+##' @param salpha Numeric vector of cumulative alpha levels for the test
+##'   statistics in `sx`. Must have the same length as `sx`.
+##' @param smatrix Matrix with the correlation matrix of the test statistics `sx`.
+##' @param sided Integer scalar indicating the side of the test:
+##'   * `-1`: Reject if test statistic is smaller than or equal to the critical value (one-sided)
+##'   * `1`: Reject if test statistic is greater or equal to the critical value (one-sided)
+##'   * `0`: Reject if the absolute value of the test statistic is greater than the critical value (two-sided)
+## TODO Should we return a vector instead of a list with just one element?
+##' @return List containing the group-sequential p-values.
+##' @author Xiaodong Luo
+##' @concept group-sequential p-values
+##' @examples
+##' calgsp1(
+##'   sx = qnorm(1 - c(0.03, 0.04, 0.01)),
+##'   scrit = qnorm(1 - c(0.01, 0.02, 0.025)),
+##'   salpha = c(0.01, 0.02, 0.025),
+##'   smatrix = diag(3),
+##'   sided = 1
+##' )
+##' @export
 calgsp1=function(sx=qnorm(1-c(0.03,0.04,0.01)),scrit=qnorm(1-c(0.01,0.02,0.025)),salpha=c(0.01,0.02,0.025),
                      smatrix=diag(3),sided=1){
-  #sx: sequence of test statistics, assumed to be multivariate normal with variance=1 and correlation matrix as smatrix
-  #scrit: sequence of critical values
-  #salpha: sequence of cumulative alpha levels
-  #smatrix: correlation matrix of the test statistics
-  #sided: 1:  one-sided, reject if the test stat >= the critical value; 
-  #       -1: one-sided, reject if the test stat <= the critical value; 
-  #       0:  two-sided, reject if the absolute value of the test stat >= the critical value.
-  
   nx=length(sx)
   
   aa=pa=rep(0,nx)

@@ -1,3 +1,4 @@
+## FIXME Is `crosslist()` really needed? Why not just use base::expand.grid()?
 crosslist=function(b=list(a1=c(2,3),a2=c(2,4),a3=c(0,1))){
   bn=length(names(b))
   an=1

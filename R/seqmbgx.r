@@ -1,26 +1,63 @@
+#' Maurer-Bretz sequential graphical approach
+#'
+#' `seqmbgx()` conducts group-sequential testing for multiple hypotheses based
+#' on Maurer-Bretz approach.
+#'
+#' @param xm Numeric matrix of test statistics for each endpoint (in row) and
+#'   each time point (in column).
+#' @param informationm Numeric matrix of information fractions for the
+#'   statistics `xm`.
+#' @param spending Character vector for the type(s) of the spending function for
+#'   each endpoint.
+#' @param param.spending parameter in the spending function
+#' @param alpha overall family-wise error rate
+#' @param sided Integer scalar indicating the side of the test:
+#'   * `-1`: Reject if test statistic is smaller than or equal to the critical value (one-sided)
+#'   * `1`: Reject if test statistic is greater or equal to the critical value (one-sided)
+#'   * `0`: Reject if the absolute value of the test statistic is greater than the critical value (two-sided)
+#' @param W Numeric vector of the weights of the graph.
+#' @param G Numeric transition matrix of the graph.
+#' @param tol Numeric scalar of tolerance level for computing the critical
+#'   values.
+#' @param retrospective Integer scalar with the following potential values
+#'   * `0`: (default) only compares the current test statistic with the updated
+#'     critical value;
+#'   * `1`: compares all the test statistics up to the current one with the updated
+#'     critical values.
+#'
+#'   Even though retrospectively looking at the values is statistically valid
+#'   in terms of control the type-1 error, not retrospectively looking at the
+#'   past comparisons avoids the dilemma of retrospectively increasing the alpha
+#'   level for the un-rejected hypothesis in the past.
+#' @return List with elements
+#'   * `Hrej`: rejected hypotheses
+#'   * `rejected`: the index set of rejected hypotheses
+#'   * `decisionsm`: rejection decision for each endpoint (row) at each timepoint (column)
+#'   * `cumdecisionsm`: cumulative rejection decision for each endpoint (row) at
+#'     each timepoint (column)
+#' @author Xiaodong Luo
+#' @concept graphical procedure
+#' @concept group-sequential
+#' @concept Maurer-Bretz
+#' @examples
+#' seqmbgx(
+#'   xm = qnorm(matrix(rep(c(0.03, 0.04, 0.01), times = 4), ncol = 3, nrow = 4)),
+#'   informationm = matrix(rep(c(0.4, 0.8, 1), each = 4), ncol = 3, nrow = 4),
+#'   spending = rep("OBF", 4),
+#'   param.spending = rep(1, 4),
+#'   alpha = 0.025,
+#'   W = c(0.5, 0.5, 0, 0),
+#'   G = rbind(c(0, 0, 1, 0), c(0, 0, 0, 1), c(0, 1, 0, 0), c(1, 0, 0, 0)),
+#'   retrospective = 0
+#' )
+#' @export
 seqmbgx=function(xm=qnorm(matrix(rep(c(0.03,0.04,0.01),times=4),ncol=3,nrow=4)),
                          informationm=matrix(rep(c(0.4,0.8,1),each=4),ncol=3,nrow=4),
                          spending=rep("OBF",4),param.spending=rep(1,4),
                          alpha=0.025,sided=-1,
-                         W=c(0.5,0.5,0,0),G=rbind(c(0,0,1,0),c(0,0,0,1),c(0,1,0,0),c(1,0,0,0)),      
+                         W=c(0.5,0.5,0,0),G=rbind(c(0,0,1,0),c(0,0,0,1),c(0,1,0,0),c(1,0,0,0)),
                          tol=1e-10,retrospective=0){
-  #xm: matrix of test statistics, assumed to be multivariate normal, each row is for one hypothesis at different time points, 
-  #    for each row, alpha levels must be non-decreasing
-  #informationm: information for each endpoints
-  #spending: type of spending function for each endpoint
-  #param.spending: parameter in the spending function
-  #alpha: overall alpha
-  #sided: 1:  one-sided, reject if the test stat >= the critical value; 
-  #       -1: one-sided, reject if the test stat <= the critical value; 
-  #       0:  two-sided, reject if the absolute value of the test stat >= the critical value.
-  #W: weights of the graph
-  #G: transition matrix of the graph
-  #tol: tolerance level for computing the critical values
-  #retrospective: 0 (default) only compares the current test statistic with the updated critical value, 
-  #               1 compares all the test statistics up to the current one with the updated critical values. 
-  #               Even though retrospectively looking at the values are statistically valid in terms of control the type-1 error, 
-  #               not retrospectively looking at the past comparisons avoids the dilemma of retrospectively inflating the alpha level.  
-  
+  #xm: matrix of test statistics, assumed to be multivariate normal
   n=nrow(xm) #number of endpoints
   s=ncol(xm) #number of analyses (interims+final)
   mseq=seq(1,n,by=1)
